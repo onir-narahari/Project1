@@ -12,8 +12,7 @@ output:
 ---
 
 ```{r global_options, echo=FALSE}
-knitr::opts_chunk$set(fig.height=3, fig.width=4, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
-getwd()
+knitr::opts_chunk$set(hide = TRUE, fig.height=3, fig.width=4, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
 
 albums <- read.csv('Project1_Albums.csv')
 ```
