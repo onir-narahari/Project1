@@ -1,0 +1,74 @@
+---
+title: "Billboard Albums"
+author: "Onir Narahari"
+date: "2024-09-17"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.height=3, fig.width=4, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
+getwd()
+
+albums <- read.csv('Project1_Albums.csv')
+```
+
+## Introduction
+
+The data set I chose was the [**Top 500 albums ranked by Rolling Stone in 2020**](https://docs.google.com/spreadsheets/d/1c_Tdnm7S1oo8R9UNtdCVIY7bYASmf_cvMynOJTpKuHA/edit?gid=0#gid=0) This list is interesting because it highlights albums that have made a significant impact in music history. The data includes various details like the year the album was released, its genre, the type of album (like studio or live), how well it did on the Billboard charts, and its popularity on Spotify. The information was gathered Rolling Stone, where they critiqued each album and ranked it on their specific scale. One source that analyzes this concept of "What makes an album great" is linked [here](https://pudding.cool/2024/03/greatest-music/). My outcome variable is **Spotify Popularity** and my predictors are **weeks on billboard**, **peak** **billboard position**, and the **genre** of the album.
+
+
+
+## Outcome Variable Graph
+
+2\. Outcome Variable.
+
+```{r echo=FALSE}
+# this is for creating the graph for the outcome variable
+library(ggplot2)
+spotifyPopularity <- albums$spotify_popularity
+weeks <- albums$weeks_on_billboard
+peak <- albums$peak_billboard_position
+
+ggplot(albums) + geom_histogram(aes(x = spotifyPopularity),binwidth = 30, col = "orange") + labs(title = "Distribution of Spotify Popularity", x = "Spotify Popularity", y = "Artists")
+# how i calculated the data
+mean(spotifyPopularity,na.rm=TRUE)
+sd(spotifyPopularity,na.rm=TRUE)
+
+
+```
+
+The mean spotify popularity for the albums is 57.78 and the standard deviation of the spotify popularity is 14.56.
+
+## Bivariate Relationship
+
+3\. Bivariate Relationship
+
+```{r echo=FALSE}
+library(ggplot2)
+# for my bivariate relationhship creating graphs for each factor and outcome variable
+ggplot(albums) + geom_point(aes(x=weeks,y=spotifyPopularity)) + labs(title='Weeks on Billboards vs Spotify Popularity ',x=' Weeks on Billboard',y='Spotify Popularity') 
+
+ggplot(albums) + geom_point(aes(x=peak,y=spotifyPopularity)) + labs(title='Peak Billboards Position vs Spotify Popularity ',x=' Peak billboard position',y='Spotify Popularity') 
+
+#created subset of the specific album genres I am analyzing
+#decided to use side-by-side boxplot for this
+albumGenre <- albums[albums$genre %in% c("Hip-Hop/Rap", "Soul/Gospel/R&B", "Indie/Alternative Rock"),]
+ggplot(albumGenre) + geom_boxplot(aes(x=spotify_popularity,y=genre)) + labs(title='Spotify Popularity vs Genre ',x='Spotify Popularity',y='Genre') 
+#group by genre and then summarize using dpliyr
+```
+
+The correlation coefficient between the weeks on billboard and the spotify popularity of albums is `r cor(weeks, spotifyPopularity, use = "complete.obs")`.There is a positive weak correlation, it is .3736067. This means that the increase in weeks on the billboard means there is a slight increase to the spotify popularity but not marginal at all. The correlation coefficient between the peak billboards and the spotify popularity of albums is `r cor(peak, spotifyPopularity, use = "complete.obs")`. There is a negative weak correlation, it is -.4333722 which means that it is moving in slightly opposite directions. This means that as the peak billboard position of an album increases, the spotify popularity of the album slightly decreases but not marginally at all. Overall both correlations are very weak.
+
+The five choice elements I used were table of contents, hyperlinks, inline code, changing font color, and creating a subset. I used the table of contents in the beginning, so I can make the report more organized and easily digestable. I used hyperlinks in the introduction so I can link all the references and sources of data easily. The reader may be interested in where I got the data, or what resources I used so linking that was important. I used inline code when describing the correlation between my bivariate graphs. I did this so I can easily add the correlation coefficient in the paragraph, and put it exactly where I was describing the graph. I changed the font color along with the hyperlinks, to emphasize the data source and make the viewer more keen on clicking the link. Lastly, I used created a subset of the album genres because there were too many genres. I wanted to narrow it down to three otherwise the graph would look bad, so I had to create a subset to do this.
+
+## Conclusion
+
+This analysis of the Top 500 albums by Rolling Stone shows a weak negative correlation between Billboard performance and Spotify popularity. Specifically, weeks on the Billboard chart (r = 0.37) and peak Billboard position (r = -0.43) do not strongly predict Spotify success. The average spotify popularity was 57.78, this shows that there is a varied popularity and overall reception among albums. This shows that researches should look at factors like marketing strategies or social media strategies, such as tiktok to understand what makes an album popular in terms of streaming.
+
+References: <https://pudding.cool/2024/03/greatest-music/>
